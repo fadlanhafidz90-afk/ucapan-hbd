@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closing Letter</title>
+
+<style>
+
+/* ================= BODY ================= */
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff9ecb,#ffc1da,#ffd6e7);
+font-family:"Courier New", monospace;
+overflow:hidden;
+}
+
+/* FLOAT ICON */
+.decor{
+position:absolute;
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+.item{
+position:absolute;
+animation:floatUp linear infinite;
+opacity:.7;
+}
+
+@keyframes floatUp{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
+}
+
+/* ================= CARD ================= */
+.closing-card{
+background:white;
+padding:45px 35px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,.25);
+opacity:0;
+transform:translateY(40px);
+transition:1.5s;
+z-index:2;
+}
+
+.closing-card.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.nextSlideBtn{
+margin-top:20px;
+padding:12px 22px;
+border:none;
+border-radius:10px;
+background:#ff4d88;
+color:white;
+cursor:pointer;
+}
+
+/* ================= MEMORY ================= */
+
+.memorySlide{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top,#ffe6f0,#ffc1da 40%,#ff9ecb);
+opacity:0;
+pointer-events:none;
+transition:1.5s;
+overflow:hidden;
+}
+
+.memorySlide.show{
+opacity:1;
+pointer-events:auto;
+}
+
+/* GLOW */
+.pinkGlow{
+position:absolute;
+width:400px;
+height:400px;
+background:radial-gradient(circle,#ffffff66,transparent);
+filter:blur(120px);
+animation:floatGlow 12s infinite alternate;
+}
+
+@keyframes floatGlow{
+from{transform:translate(-60px,-40px);}
+to{transform:translate(60px,50px);}
+}
+
+/* MEMORY AREA GRID (ANTI NUMPUK) */
+.memoryBox{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+display:grid;
+grid-template-columns:repeat(4,160px);
+gap:30px;
+}
+
+/* FOTO */
+.memoryBox img{
+width:150px;
+height:190px;
+object-fit:cover;
+border-radius:15px;
+border:6px solid white;
+box-shadow:0 15px 35px rgba(255,105,180,.4);
+opacity:0;
+transform:scale(.5);
+transition:1s;
+}
+
+.memoryBox img.show{
+opacity:1;
+transform:scale(1);
+}
+
+/* FOTO TERAKHIR */
+.focus{
+box-shadow:
+0 0 20px #fff,
+0 0 40px #ffb6d9,
+0 0 70px #ff9ecb;
+transform:scale(1.08);
+}
+
+/* END TEXT FIX */
+.endText{
+position:absolute;
+top:18px;              /* naik lebih atas */
+left:50%;
+transform:translateX(-50%);
+font-size:26px;        /* lebih kecil */
+font-weight:700;
+color:#111;
+opacity:0;
+transition:2s;
+text-align:center;
+padding:8px 20px;
+}
+
+.endText.show{
+opacity:1;
+}
+
+/* CREDIT */
+.credit{
+position:absolute;
+bottom:18px;
+left:50%;
+transform:translateX(-50%);
+font-size:13px;
+font-weight:600;
+letter-spacing:1px;
+color:#111;
+opacity:0;
+transition:2s;
+}
+
+.credit.show{
+opacity:.65;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="decor" id="decor"></div>
+
+<!-- CARD -->
+<div class="closing-card" id="card">
+
+<h2>Thank You For Reading 🤍</h2>
+
+<p>
+Semoga hari kamu selalu dipenuhi hal baik,<br>
+dan senyum kamu ga pernah hilang.
+</p>
+
+<button class="nextSlideBtn" onclick="nextSlide()">
+Lihat Kenangan Kita ➜
+</button>
+
+</div>
+
+<!-- MEMORY -->
+<div class="memorySlide" id="memorySlide">
+
+<div class="pinkGlow"></div>
+<div class="pinkGlow" style="right:0;bottom:0;"></div>
+
+<div class="memoryBox">
+
+<div class="memoryBox">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 22.27.11 (1).jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 23.54.36.jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 22.32.00.jpeg" alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 22.27.15.jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 22.27.14.jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 22.27.15 (1).jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 23.54.37 (2).jpeg"alt="ciya" id="secretImg">
+    <img src="c:\Users\USER\Downloads\WhatsApp Image 2026-10-11 at 23.54.37 (1).jpeg"alt="ciya" id="secretImg">
+</div>
+    
+</div>
+
+<div class="endText" id="endText">
+Happy to meet you in my life<br>
+Cheers to more memories! 🥂
+</div>
+
+<div class="credit" id="credit">
+Built by AYAN
+</div>
+
+</div>
+
+<audio id="bgMusic" src="music/foundyou.mp3"></audio>
+
+<script>
+
+/* FLOAT ICON */
+const decor=document.getElementById("decor");
+const icons=["🤍","🌸","✨","💗"];
+
+for(let i=0;i<25;i++){
+let el=document.createElement("div");
+el.className="item";
+el.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+el.style.left=Math.random()*100+"%";
+el.style.animationDuration=(6+Math.random()*6)+"s";
+decor.appendChild(el);
+}
+
+/* SHOW CARD */
+setTimeout(()=>{
+card.classList.add("show");
+},800);
+
+/* NEXT */
+function nextSlide(){
+
+document.getElementById("bgMusic").play();
+
+card.style.opacity="0";
+card.style.transform="translateX(-120px)";
+
+setTimeout(()=>{
+memorySlide.classList.add("show");
+showMemories();
+},700);
+}
+
+/* FOTO MUNCUL SATU2 */
+function showMemories(){
+
+const photos=document.querySelectorAll(".memoryBox img");
+
+photos.forEach((img,i)=>{
+setTimeout(()=>{
+img.classList.add("show");
+},i*400);
+});
+
+/* FOCUS FOTO TERAKHIR */
+/* SEMUA FOTO GLOW BARENG */
+setTimeout(()=>{
+
+photos.forEach(img=>{
+img.classList.add("focus");
+});
+
+},photos.length*400+600);
+
+/* END TEXT */
+setTimeout(()=>{
+document.getElementById("endText")
+.classList.add("show");
+},photos.length*400+2200);
+
+/* CREDIT BUILT BY */
+setTimeout(()=>{
+document.getElementById("credit")
+.classList.add("show");
+},photos.length*400+3500);
+
+}
+
+</script>
+
+</body>
+</html>

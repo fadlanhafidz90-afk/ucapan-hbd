@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Letter For Owcaa</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction: column; 
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ff9ecb,#ffc1da,#ffd6e7);
+  font-family:"Courier New", monospace;
+  overflow:hidden;
+}
+
+/* ================= BACKGROUND DECOR ================= */
+.decor{
+  position:absolute;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:0;
+}
+
+.item{
+  position:absolute;
+  animation:floatUp linear infinite;
+  opacity:.7;
+  font-size:18px;
+}
+
+@keyframes floatUp{
+  from{ transform:translateY(100vh) scale(.8); opacity:0; }
+  20%{opacity:.8;}
+  to{ transform:translateY(-10vh) scale(1.2); opacity:0; }
+}
+
+/* ================= PAPER ================= */
+.paper{
+  width:320px;
+  height:420px;
+  padding:40px 25px;
+  border-radius:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  position:relative;
+  transform:rotate(-2deg);
+  z-index:2;
+  background: repeating-linear-gradient(to bottom, white 0px, white 27px, #b6d7ff 28px);
+  background-size:100% 28px;
+  overflow:hidden;
+}
+
+.paper::before{
+  content:"";
+  position:absolute;
+  left:-12px;
+  top:0;
+  height:100%;
+  width:12px;
+  background: radial-gradient(circle,#bbb 4px,transparent 5px) center/12px 28px repeat-y;
+}
+
+#text{
+  white-space:pre-line;
+  font-size:16px;
+  line-height:28px;
+  color:#222;
+  height:85%;
+  overflow-y:auto;
+  padding-right:10px;
+}
+
+/* Scrollbar tipis biar rapi */
+#text::-webkit-scrollbar { width: 4px; }
+#text::-webkit-scrollbar-thumb { background: #ff9ecb; border-radius: 10px; }
+
+#from{
+  opacity:0;
+  display:block;
+  text-align:right;
+  margin-top:20px;
+  font-size:17px;
+  color:#000;
+  font-weight:700;
+  position:relative;
+  z-index:5;
+  background:white;
+  padding-top:8px;
+  transition: 1s; 
+}
+
+/* ================= TOMBOL LANJUT ================= */
+#nextBtn {
+    margin-top: 25px;
+    padding: 10px 20px;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    background: white;
+    border: none;
+    border-radius: 20px;
+    color: #ff6b9d;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0; 
+    pointer-events: none; 
+    transition: 1s;
+}
+
+/* FINISH EFFECT */
+.paper.finish{
+  animation:finishGlow 2s ease forwards;
+}
+
+@keyframes finishGlow{
+  0%{ box-shadow:0 20px 60px rgba(0,0,0,.4); transform:rotate(-2deg) scale(1); }
+  100%{ box-shadow:0 20px 70px rgba(255,182,193,.8); transform:rotate(-2deg) scale(1.03); }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="music/bk.mp3" type="audio/mpeg">
+</audio>
+
+<div class="decor" id="decor"></div>
+
+<div class="paper" id="paper">
+  <div id="text"></div>
+  <div id="from">— from: AYAN 🤍</div>
+</div>
+
+<button onclick="nextPage()" id="nextBtn">
+  Lanjut 💌
+</button>
+
+<script>
+const message = `Selamat ulang tahun yaaa 🎉
+
+Ga kerasa ya, ini jadi ulang tahun kedua kamu sejak kita kenal. Tau-tau waktunya udah muter lagi aja. Semoga di umur kamu yang sekarang, pelan-pelan makin banyak hal baik yang dateng. Yang lagi kamu usahain semoga lancar, dan yang lagi kamu pengenin semoga bisa satu-satu tercapai.
+
+CIYEE SEKARANG UDAH TUAA YAA UDAH 14 TAONN. bagi ayan buat orang special ga cukup hanya sebatas "happy birthday wish u all the best" apalagi buat orang yang udah jadi makna dalam hidup aku
+
+Semoga tahun ini isinya lebih banyak ketawa, lebih banyak hal bahagia, dan lebih sedikit overthinking. Kalau suatu hari lagi capek atau ngerasa berat ada aku disini, i'm here ciya, anything for you.
+
+CIYA SELAMAT 14 TAHUN YAHH, ayan sangatt berharap yang terbaikk untukk kamuu, akuh jugaa selalu berdoa untuk semua mimpi mimpi kamu yang belum terwujud, agar bisa terwujud dimasa depan 
+
+Nikmatin hari ciya yaa, soalnya hari ini spesial — soalnya orang spesial lagi nambah umur 😉
+
+Happy birthday ya, semoga tahun ini jadi salah satu tahun terbaik buat ciyaaww 🤍`;
+
+let i=0;
+const speed=45;
+const textEl=document.getElementById("text");
+const paperEl=document.getElementById("paper");
+const fromEl=document.getElementById("from");
+const btnEl=document.getElementById("nextBtn");
+const music = document.getElementById("bgMusic");
+
+// Trik Jitu: Paksa musik jalan saat layar diklik pertama kali
+document.body.addEventListener('click', function() {
+    music.play().catch(e => console.log("Audio play failed: ", e));
+}, { once: true });
+
+function startEverything(){
+    // Coba putar otomatis
+    music.play().catch(e => {
+        console.log("Autoplay diblokir browser, musik akan aktif saat layar disentuh.");
+    });
+    typeWriter();
+}
+
+function typeWriter(){
+  if(i < message.length){
+    textEl.innerHTML += message.charAt(i);
+    textEl.scrollTop=textEl.scrollHeight;
+    i++;
+    setTimeout(typeWriter,speed);
+  }else{
+    setTimeout(()=>{
+      fromEl.style.opacity=1; 
+      paperEl.classList.add("finish"); 
+      
+      setTimeout(() => {
+          btnEl.style.opacity = 1;
+          btnEl.style.pointerEvents = "auto"; 
+      }, 1000);
+    },700);
+  }
+}
+
+// Jalankan saat halaman dimuat
+window.onload = startEverything;
+
+// Decor logic
+const decor=document.getElementById("decor");
+const icons=["🤍","🌸","✨","💗","💮"];
+for(let i=0;i<30;i++){
+  let el=document.createElement("div");
+  el.className="item";
+  el.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+  el.style.left=Math.random()*100+"%";
+  el.style.animationDuration=(6+Math.random()*6)+"s";
+  el.style.animationDelay=Math.random()*5+"s";
+  decor.appendChild(el);
+}
+
+function nextPage(){
+  window.location.href="penutupan.html"; 
+}
+</script>
+
+</body>
+</html>

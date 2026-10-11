@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<link rel="icon" href="https://fav.farm/🎂" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For Aqila Kineta Putri Hanin ❤️</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(180deg,#1a1a2e,#3a1c71,#ff758c);
+color:white;
+overflow:hidden;
+}
+
+/* SCREEN */
+.screen{
+text-align:center;
+display:none;
+padding:20px;
+animation:fadeIn .8s ease;
+position:relative;
+z-index:2;
+}
+
+.active{
+display:block;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* BUTTON */
+button{
+margin-top:15px;
+padding:12px 25px;
+border:none;
+border-radius:10px;
+background:#ff4d88;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 4px 15px rgba(255,77,136,.3);
+}
+
+button:hover{
+background:#ff2e70;
+transform:scale(1.05);
+}
+
+input{
+padding:12px;
+border:none;
+border-radius:10px;
+font-size:16px;
+text-align:center;
+margin-top:15px;
+}
+
+/* GAME */
+.grid{
+display:grid;
+grid-template-columns:repeat(4,70px);
+gap:12px;
+margin-top:15px;
+}
+
+.card{
+width:70px;
+height:70px;
+background:#ffffff22;
+border-radius:12px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+cursor:pointer;
+transition:.3s;
+}
+
+.card.flip{background:white;color:#ff4d88;}
+.card.matched{background:#ff4d88;color:white}
+
+/* ===== APRESIASI ===== */
+
+#appreciation{
+position:relative;
+}
+
+/* GLOW BACKGROUND */
+.glow{
+position:absolute;
+width:400px;
+height:400px;
+background:radial-gradient(circle,#ffffff55,transparent);
+filter:blur(120px);
+animation:floatGlow 10s infinite alternate;
+pointer-events:none; /* FIX UTAMA */
+z-index:0;
+}
+
+.glow:nth-child(1){
+top:-120px;
+left:-120px;
+}
+
+.glow:nth-child(2){
+bottom:-120px;
+right:-120px;
+}
+
+@keyframes floatGlow{
+from{transform:translate(-40px,-20px);}
+to{transform:translate(40px,40px);}
+}
+
+.typing{
+min-height:130px;
+white-space:pre-line;
+}
+
+/* BUTTON PALING ATAS */
+#continueBtn{
+position:relative;
+z-index:5;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active">
+<h2>Halo, Aqila Kineta Putri Hanin ❤️</h2>
+<p>Aku punya sesuatu yang khusus buat kamu hari ini.<br>Siap buat lihat kejutannya?</p>
+<button onclick="start()">Buka Kadonya ✨</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="screen">
+<h2>Verifikasi Dulu Ya.. 💌</h2>
+<p>Masukkan tanggal lahir kamu contoh (07122011).</p>
+<input type="password" id="pw">
+<br>
+<button onclick="checkPw()">Masuk</button>
+<p id="error"></p>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+<h2>Memory Game 💖</h2>
+<p>Cari pasangan yang sama ya!</p>
+<div class="grid" id="grid"></div>
+<div id="win"></div>
+</div>
+
+<!-- APRESIASI -->
+<div id="appreciation" class="screen">
+
+<div class="glow"></div>
+<div class="glow"></div>
+
+<h2>Kamu Hebat 🤍</h2>
+
+<p class="typing" id="typingText"></p>
+
+<button id="continueBtn" onclick="goOca()" style="display:none;">
+Lanjut 💌
+</button>
+
+</div>
+
+<script>
+
+/* PASSWORD */
+const PASSWORD="01132013";
+
+/* NAV */
+function start(){
+welcome.classList.remove("active");
+login.classList.add("active");
+}
+
+function checkPw(){
+if(pw.value===PASSWORD){
+login.classList.remove("active");
+game.classList.add("active");
+}else{
+error.innerText="Password salah, masa tanggal lahir sendiri ga ingett 😢";
+}
+}
+
+/* ===== MEMORY GAME ===== */
+
+const emojis=[
+"💖","❤️","💕","💘","💝","💗",
+"💖","❤️","💕","💘","💝","💗"
+];
+
+let shuffled=emojis.sort(()=>0.5-Math.random());
+const grid=document.getElementById("grid");
+
+let first=null,second=null,lock=false,match=0;
+
+shuffled.forEach(e=>{
+
+const card=document.createElement("div");
+card.className="card";
+card.dataset.emoji=e;
+card.innerHTML="?";
+
+card.onclick=()=>{
+
+if(lock||card.classList.contains("flip"))return;
+
+card.classList.add("flip");
+card.innerHTML=e;
+
+if(!first){first=card;return;}
+
+second=card;
+lock=true;
+
+if(first.dataset.emoji===second.dataset.emoji){
+
+first.classList.add("matched");
+second.classList.add("matched");
+match++;
+reset();
+
+if(match===6){
+win.innerHTML=
+`❤️ Kamu menang! ❤️ <br><br>
+<button onclick="showAppreciation()">Lanjut 💌</button>`;
+}
+
+}else{
+setTimeout(()=>{
+first.classList.remove("flip");
+second.classList.remove("flip");
+first.innerHTML="?";
+second.innerHTML="?";
+reset();
+},800);
+}
+
+};
+
+grid.appendChild(card);
+});
+
+function reset(){
+first=null;
+second=null;
+lock=false;
+}
+
+/* ===== APRESIASI ===== */
+
+const message=`Terima kasih sudah menyelesaikan game ini sampai akhir.
+
+Gokil, kelar juga akhirnya!
+Ternyata kamu jago juga ya main ginian.
+
+Nah, karena udah menang...
+
+scroll ke bawah yaa...
+ada sesuatu yang memang
+dibuat khusus untuk kamu sayanggg 🤍`;
+
+let i=0;
+
+function showAppreciation(){
+game.classList.remove("active");
+appreciation.classList.add("active");
+typeText();
+}
+
+function typeText(){
+
+const el=document.getElementById("typingText");
+const btn=document.getElementById("continueBtn");
+
+let typing=setInterval(()=>{
+el.textContent+=message[i];
+i++;
+
+if(i>=message.length){
+clearInterval(typing);
+btn.style.display="inline-block";
+}
+},35);
+}
+
+/* ===== REDIRECT ===== */
+
+function goOca(){
+window.location.href="buataqila.html";
+}
+
+</script>
+
+</body>
+</html>
